@@ -1,3 +1,7 @@
 {
-  "notebooks": {}
+  "notebooks": {
+    "FastFood_Nutrition.ipynb": {
+      "slug": "1da304c851574f71ba832e2db5b098a1"
+    }
+  }
 }
