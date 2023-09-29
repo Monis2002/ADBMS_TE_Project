@@ -52,18 +52,31 @@ def submit():
         name_of_medicine=''
         message='result'
         for name, quantity, price in zip(medicine_names, quantities, prices):
-            stock_data=mongo.db.stock.find({'name':name})
-
-            for i in stock_data:
-                print(i['qty']>=int(quantity))
-                if i['qty']<int(quantity):
-                    message='medicine_not_available'
-                    name_of_medicine=i['name']
-                    break
-            mongo.db.monis.insert_one({"Name": name, 'quantity': int(quantity), 'price': float(price),'total':float(total)})
-            data.append({'name': name, 'quantity': int(quantity), 'price': float(price)})
+            stock_data=list(mongo.db.stock.find({'name':name}))
+            if len(stock_data)>0:
+                for i in stock_data:
+                    if i['qty']<int(quantity):
+                        message='not_availabel'
+                        name_of_medicine=name
+                        break
+                mongo.db.monis.insert_one({"Name": name, 'quantity': int(quantity), 'price': float(price),'total':float(total)})
+                data.append({'name': name, 'quantity': int(quantity), 'price': float(price)})
+            else:
+                message='not_availabel'
+                name_of_medicine=name
 
         if message=="result":
+            # This loop is to update stock after billing process
+            for name, quantity, price in zip(medicine_names, quantities, prices):
+                stock_data = mongo.db.stock.find({'name': name})
+                for i in stock_data:
+                    mongo.db.stock.update_one({'name':name},{'$set':{'qty':i['qty']-int(quantity)}})
+            # To delete data which quantity is zero
+            for name, quantity, price in zip(medicine_names, quantities, prices):
+                stock_data = mongo.db.stock.find({'name': name})
+                for i in stock_data:
+                    if i['qty']==0:
+                        mongo.db.stock.delete_one({'qty':0})
             return render_template('result.html', data=data,total=total)
         else:
             return  name_of_medicine+" Medicine is not available"
@@ -71,4 +84,5 @@ def submit():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    submit()
 
