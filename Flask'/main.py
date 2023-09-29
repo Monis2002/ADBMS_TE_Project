@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_pymongo import PyMongo
+import datetime
 
 
 
@@ -52,14 +53,16 @@ def submit():
         name_of_medicine=''
         message='result'
         for name, quantity, price in zip(medicine_names, quantities, prices):
-            stock_data=list(mongo.db.stock.find({'name':name}))
+            print(name)
+            stock_data=list(mongo.db.stock.find({'Name':name}))
+            print(stock_data,list(stock_data))
             if len(stock_data)>0:
                 for i in stock_data:
                     if i['qty']<int(quantity):
                         message='not_availabel'
                         name_of_medicine=name
                         break
-                mongo.db.monis.insert_one({"Name": name, 'quantity': int(quantity), 'price': float(price),'total':float(total)})
+                mongo.db.customer_order_collection.insert_one({"Name": name, 'quantity': int(quantity), 'price': float(price),'total':float(total),'date': datetime.datetime.now()})
                 data.append({'name': name, 'quantity': int(quantity), 'price': float(price)})
             else:
                 message='not_availabel'
@@ -68,18 +71,32 @@ def submit():
         if message=="result":
             # This loop is to update stock after billing process
             for name, quantity, price in zip(medicine_names, quantities, prices):
-                stock_data = mongo.db.stock.find({'name': name})
+                stock_data = mongo.db.stock.find({'Name': name})
                 for i in stock_data:
-                    mongo.db.stock.update_one({'name':name},{'$set':{'qty':i['qty']-int(quantity)}})
+                    mongo.db.stock.update_one({'Name':name},{'$set':{'qty':i['qty']-int(quantity)}})
             # To delete data which quantity is zero
             for name, quantity, price in zip(medicine_names, quantities, prices):
-                stock_data = mongo.db.stock.find({'name': name})
+                stock_data = mongo.db.stock.find({'Name': name})
                 for i in stock_data:
                     if i['qty']==0:
                         mongo.db.stock.delete_one({'qty':0})
             return render_template('result.html', data=data,total=total)
         else:
             return  name_of_medicine+" Medicine is not available"
+
+@app.route('/add_stock')
+def add_stock():
+    return render_template('add_stock.html')
+
+@app.route("/add_medicine", methods=['POST', 'GET'])
+def add_medicine():
+    if request.method=="POST":
+        medicine_names = request.form.getlist('medicine_name[]')
+        quantities = request.form.getlist('quantity[]')
+
+        for name,qty in zip(medicine_names,quantities):
+            mongo.db.stock.insert_one({"Name":name,'qty':int(qty)})
+    return redirect('index')
 
 
 if __name__ == '__main__':

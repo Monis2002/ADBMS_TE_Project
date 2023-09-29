@@ -6,29 +6,18 @@
     <title>Medicine Inventory</title>
 </head>
 <body>
-    <h1>Medicine Inventory</h1>
-    <form action="/submit" method="POST">
+    <h1> Add Medicine </h1>
+    <form action="/add_medicine" method="POST">
         <div id="medicine-form">
             <div class="medicine-row">
                 <input type="text" name="medicine_name[]" placeholder="Medicine Name" required>
                 <input type="number" name="quantity[]" placeholder="Quantity" required>
-                <input type="number" name="price[]" placeholder="Price" step="0.01" required>
+
                 <button type="button" class="remove-row">Remove</button>
             </div>
         </div>
         <button type="button" id="add-row">Add Medicine</button>
         <button type="submit">Submit</button>
-    </form>
-
-<!--    Add Medicine page -->
-    <br>
-    <br>
-    <br>
-    <h1>Add Medicine to Stock</h1>
-    <form action="/add_stock">
-
-
-        <button type="submit">Go ...</button>
     </form>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -41,7 +30,7 @@
                 newRow.innerHTML = `
                     <input type="text" name="medicine_name[]" placeholder="Medicine Name" required>
                     <input type="number" name="quantity[]" placeholder="Quantity" required>
-                    <input type="number" name="price[]" placeholder="Price" step="0.01" required>
+
                     <button type="button" class="remove-row">Remove</button>
                 `;
                 medicineForm.appendChild(newRow);
