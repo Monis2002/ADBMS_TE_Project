@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Inventory</title>
+</head>
+<body>
+    <h1>Medicine Inventory</h1>
+    <form action="/submit" method="POST">
+        <div id="medicine-form">
+            <div class="medicine-row">
+                <input type="text" name="medicine_name[]" placeholder="Medicine Name" required>
+                <input type="number" name="quantity[]" placeholder="Quantity" required>
+                <input type="number" name="price[]" placeholder="Price" step="0.01" required>
+                <button type="button" class="remove-row">Remove</button>
+            </div>
+        </div>
+        <button type="button" id="add-row">Add Medicine</button>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addRowButton = document.getElementById("add-row");
+            const medicineForm = document.getElementById("medicine-form");
+
+            addRowButton.addEventListener("click", function () {
+                const newRow = document.createElement("div");
+                newRow.classList.add("medicine-row");
+                newRow.innerHTML = `
+                    <input type="text" name="medicine_name[]" placeholder="Medicine Name" required>
+                    <input type="number" name="quantity[]" placeholder="Quantity" required>
+                    <input type="number" name="price[]" placeholder="Price" step="0.01" required>
+                    <button type="button" class="remove-row">Remove</button>
+                `;
+                medicineForm.appendChild(newRow);
+
+                const removeButtons = document.querySelectorAll(".remove-row");
+                removeButtons.forEach((button) => {
+                    button.addEventListener("click", function () {
+                        newRow.remove();
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
