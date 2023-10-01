@@ -10,7 +10,7 @@ mongo = PyMongo(app)
 @app.route('/',methods=["POST","GET"])
 def login():
     #mongo.db.stock.insert_one({"name":"cilacar",'qty':4})
-    return render_template('login.html')
+    return render_template('login_form.html')
 
 @app.route('/login_check',methods=['POST','GET'])
 def login_check():
@@ -27,7 +27,7 @@ def login_check():
 
 @app.route('/fail')
 def fail():
-    return "<h1>Please check your username or email</h1>"
+    return render_template('fail.html')
 
 @app.route('/index')
 def index():
@@ -36,6 +36,9 @@ def index():
 
     return render_template('index.html')
 
+@app.route('/medicine_inventory')
+def medicine_inventory():
+    return render_template('medicine_inventory.html')
 
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
@@ -84,7 +87,7 @@ def submit():
 
 @app.route('/add_stock')
 def add_stock():
-    return render_template('add_stock.html')
+    return render_template('add_stock_new.html')
 
 @app.route("/add_medicine", methods=['POST', 'GET'])
 def add_medicine():
@@ -98,7 +101,7 @@ def add_medicine():
 
 @app.route('/delete_stock')
 def delete_stock():
-    return render_template('delete_stock.html')
+    return render_template('delete_stock_new.html')
 
 @app.route('/delete_medicine',methods=["POST","GET"])
 def delete_medicine():

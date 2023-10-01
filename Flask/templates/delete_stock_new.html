@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Young+Serif&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Young+Serif&display=swap" rel="stylesheet">
     <title>Deleting Medicine</title>
     <style>
         /* Import Google Fonts */
@@ -15,7 +16,7 @@
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
-        
+
         /* Center the content horizontally and vertically */
         html, body {
             display: flex;
@@ -24,17 +25,17 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            background: #1abc9c url('image.jpg') no-repeat center center;
-            background-size: 1;
+            background: #1abc9c url('/static/img/image.jpg') no-repeat center center;
+            background-size: cover;
         }
-        
+
         /* Style the content */
         #content {
             background-color: lightblue; /* Add a semi-transparent white background to make content more readable */
             padding: 28px;
             border-radius: 10px;
         }
-        
+
         /* Style the title */
         h1 {
             background: rgb(149, 214, 240);
@@ -46,7 +47,7 @@
             width: 100%; /* Full width */
             text-align: center; /* Center text horizontally */
         }
-        
+
         .medicine-row {
             display: flex;
             align-items: center;
@@ -111,7 +112,7 @@
     </style>
 </head>
 <body>
-    <h1>Delete Medicine From Stock</h1> <!-- Moved the heading to the top -->
+    <h1 style="font-family: 'Kalam', cursive;">Delete Medicine From Stock</h1> <!-- Moved the heading to the top -->
 
     <div id="content">
         <form action="/delete_medicine" method="POST">

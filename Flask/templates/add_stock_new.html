@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Young+Serif&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Young+Serif&display=swap" rel="stylesheet">
+
     <title>Medicine Inventory</title>
     <style>
         /* Import Google Fonts */
@@ -24,7 +26,7 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            background: #1abc9c url('image.jpg') no-repeat center center;
+            background: #1abc9c url('/static/img/image.jpg') no-repeat center center;
             background-size: cover;
         }
 
@@ -116,7 +118,7 @@
     </style>
 </head>
 <body>
-    <h1> Add Medicine to Stock</h1> <!-- Moved the heading to the top -->
+    <h1 style="font-family: 'Kalam', cursive;"> Add Medicine to Stock</h1> <!-- Moved the heading to the top -->
 
     <div id="content">
         <form action="/add_medicine" method="POST">

@@ -4,25 +4,26 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Login Form | CodingLab</title> 
-    <link rel="stylesheet" href="style.css">
+     <title>Login Form</title>
+    <link rel="stylesheet" href="static/styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
   </head>
   <body>
     <div class="container">
       <div class="wrapper">
         <div class="title"><span>User Login</span></div>
-        <form action="home.html">
+        <form action="/login_check" method="POST">
           <div class="row">
             <i class="fas fa-user"></i>
-            <input type="text" placeholder="UserID" required>
+            <input type="text" name="username" placeholder="UserID" required>
           </div>
           <div class="row">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Password" required>
+            <input type="password" name="password" placeholder="Password" required>
           </div>
-          <div class="row button">
-            <input type="submit" value="Login" >
+          <div style="text-align: center;" class="row button">
+            <button class='btn_login' type="submit">Submit</button>
+
           </div>
         </form>
       </div>
