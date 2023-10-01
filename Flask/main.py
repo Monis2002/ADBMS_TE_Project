@@ -9,14 +9,34 @@ mongo = PyMongo(app)
 # Login Page
 @app.route('/',methods=["POST","GET"])
 def login():
-    #mongo.db.stock.insert_one({"name":"cilacar",'qty':4})
+
     return render_template('login_form.html')
+
+@app.route('/sign_up')
+def sign_up():
+    return render_template('sign_up.html')
+
+@app.route('/signup_process',methods=['POST','GET'])
+def signup_process():
+    if request.method=="POST":
+        username=request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+
+        if password!=confirm_password:
+            return render_template('password_same.html')
+        else:
+            mongo.db.login.insert_one({"username":username,'password':password,'email':email})
+            return render_template('login_form.html')
+
+
 
 @app.route('/login_check',methods=['POST','GET'])
 def login_check():
     if request.method=="POST":
         username=request.form.get('username')
-        password=int(request.form.get('password'))
+        password=request.form.get('password')
         data=mongo.db.login.find({},{'_id':0})
         r='fail'
 
@@ -31,14 +51,12 @@ def fail():
 
 @app.route('/index')
 def index():
-    # Insert data to database
-    #mongo.db.login.insert_one({'username':'monis','password':123})
 
-    return render_template('index.html')
+    return render_template('index_new.html')
 
 @app.route('/medicine_inventory')
 def medicine_inventory():
-    return render_template('medicine_inventory.html')
+    return render_template('medicine_inventory_new.html')
 
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
@@ -81,9 +99,10 @@ def submit():
                 for i in stock_data:
                     if i['qty']==0:
                         mongo.db.stock.delete_one({'qty':0})
-            return render_template('result.html', data=data,total=total)
+            return render_template('result_new.html', data=data,total=total)
         else:
-            return  name_of_medicine+" Medicine is not available"
+            return render_template('not_available.html',data=name_of_medicine)
+
 
 @app.route('/add_stock')
 def add_stock():
@@ -129,7 +148,7 @@ def display_stock():
     for i in data:
         data_list.append({'Name':i['Name'],'qty':i['qty']})
 
-    return render_template('display_stock.html',data=data_list)
+    return render_template('display_stock_new.html',data=data_list)
 
 if __name__ == '__main__':
     app.run(debug=True,port=5001)
