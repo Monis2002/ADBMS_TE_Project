@@ -137,8 +137,8 @@ def delete_medicine():
         for name, quantity in zip(medicine_names, quantities):
             stock_data = mongo.db.stock.find({'Name': name})
             for i in stock_data:
-                if i['qty'] == 0:
-                    mongo.db.stock.delete_one({'qty': 0})
+                if i['qty'] <= 0 :
+                    mongo.db.stock.delete_one({'qty':i['qty']})
         return redirect('index')
 
 @app.route('/display_stock')
