@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('/static/img/doctor.jpg'); /* Specify the path to your background image */
+            background-image: url('/static/img/medicine_1.jpg'); /* Specify the path to your background image */
             background-size: cover; /* Ensure the image covers the entire background */
             background-repeat: no-repeat; /* Prevent the image from repeating */
             background-attachment: fixed; /* Keep the image fixed while scrolling */
@@ -44,6 +44,18 @@
             margin-top: 20px;
             color: white; /* Set text color to white for better visibility */
         }
+
+        /* Style the Total like a button with background color */
+        .total-button {
+            background-color: #4CAF50; /* Green background color */
+            color: white; /* Text color */
+            padding: 10px 20px; /* Padding for button-like appearance */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            margin-top: 10px;
+            font-weight: bold; /* Make text bold */
+            cursor: pointer; /* Show pointer cursor on hover */
+        }
     </style>
 
     <!-- Bootstrap CSS (you can keep this if needed) -->
@@ -71,7 +83,9 @@
                 </tr>
             {% endfor %}
         </table>
-        <h4>Total: ${{ total }}</h4>
+
+        <!-- Style the Total as a button with background color -->
+        <h4><button class="total-button">Total: ${{ total }}</button></h4>
     </div>
 </body>
 </html>
