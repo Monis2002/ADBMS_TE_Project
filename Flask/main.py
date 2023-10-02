@@ -72,9 +72,7 @@ def submit():
         name_of_medicine=''
         message='result'
         for name, quantity, price in zip(medicine_names, quantities, prices):
-            print(name)
             stock_data=list(mongo.db.stock.find({'Name':name}))
-            print(stock_data,list(stock_data))
             if len(stock_data)>0:
                 for i in stock_data:
                     if i['qty']<int(quantity):
@@ -98,7 +96,7 @@ def submit():
                 stock_data = mongo.db.stock.find({'Name': name})
                 for i in stock_data:
                     if i['qty']==0:
-                        mongo.db.stock.delete_one({'qty':0})
+                        mongo.db.stock.delete_one({'qty':i['qty']})
             return render_template('result_new.html', data=data,total=total)
         else:
             return render_template('not_available.html',data=name_of_medicine)
