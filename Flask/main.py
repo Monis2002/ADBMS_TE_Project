@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_pymongo import PyMongo
 import datetime
 
+# Connection
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/monis"
 mongo = PyMongo(app)
@@ -9,9 +10,9 @@ mongo = PyMongo(app)
 # Login Page
 @app.route('/',methods=["POST","GET"])
 def login():
-
     return render_template('login_form.html')
 
+# Sign Up
 @app.route('/sign_up')
 def sign_up():
     return render_template('sign_up.html')
@@ -28,10 +29,11 @@ def signup_process():
             return render_template('password_same.html')
         else:
             mongo.db.login.insert_one({"username":username,'password':password,'email':email})
+            print("New User is added to login Collection")
             return render_template('login_form.html')
 
 
-
+# Login logic
 @app.route('/login_check',methods=['POST','GET'])
 def login_check():
     if request.method=="POST":
@@ -45,19 +47,20 @@ def login_check():
                 r='index'
         return redirect(url_for(r))
 
+# If user is invalid
 @app.route('/fail')
 def fail():
     return render_template('fail.html')
-
+# If user is valid
 @app.route('/index')
 def index():
 
     return render_template('index_new.html')
-
+# Order medicine page
 @app.route('/medicine_inventory')
 def medicine_inventory():
     return render_template('medicine_inventory_new.html')
-
+# Order logic
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
     if request.method == 'POST':
@@ -97,11 +100,12 @@ def submit():
                 for i in stock_data:
                     if i['qty']==0:
                         mongo.db.stock.delete_one({'qty':i['qty']})
+            print("Order has been taken and qty is subtracted from Stock Collection")
             return render_template('result_new.html', data=data,total=total)
         else:
             return render_template('not_available.html',data=name_of_medicine)
 
-
+# Stock page
 @app.route('/add_stock')
 def add_stock():
     return render_template('add_stock_new.html')
@@ -114,6 +118,7 @@ def add_medicine():
 
         for name,qty in zip(medicine_names,quantities):
             mongo.db.stock.insert_one({"Name":name,'qty':int(qty)})
+        print("Medicine is added to stock")
     return redirect('index')
 
 @app.route('/delete_stock')
@@ -137,6 +142,7 @@ def delete_medicine():
             for i in stock_data:
                 if i['qty'] <= 0 :
                     mongo.db.stock.delete_one({'qty':i['qty']})
+        print("Medicine is removed from stock")
         return redirect('index')
 
 @app.route('/display_stock')
@@ -146,6 +152,7 @@ def display_stock():
     for i in data:
         data_list.append({'Name':i['Name'],'qty':i['qty']})
 
+    print("Stock is displayed")
     return render_template('display_stock_new.html',data=data_list)
 
 if __name__ == '__main__':
