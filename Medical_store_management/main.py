@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_pymongo import PyMongo
 import datetime
+from logger import logging
 
 # Connection
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def signup_process():
             return render_template('password_same.html')
         else:
             mongo.db.login.insert_one({"username":username,'password':password,'email':email})
-            print("New User is added to login Collection")
+            logging.info("New User is added to login Collection")
             return render_template('login_form.html')
 
 
@@ -82,6 +83,7 @@ def submit():
                         message='not_availabel'
                         name_of_medicine=name
                         break
+
                 mongo.db.customer_order_collection.insert_one({"Name": name, 'quantity': int(quantity), 'price': float(price),'total':float(total),'date': datetime.datetime.now()})
                 data.append({'name': name, 'quantity': int(quantity), 'price': float(price)})
             else:
@@ -94,16 +96,30 @@ def submit():
                 stock_data = mongo.db.stock.find({'Name': name})
                 for i in stock_data:
                     mongo.db.stock.update_one({'Name':name},{'$set':{'qty':i['qty']-int(quantity)}})
+            # The Next order
+            data_min = list(mongo.db.stock.find({'qty': {'$lt': 5}}))
+            for i in data_min:
+                temp=list(mongo.db.next_order.find({"Name":i['Name']}))
+                if len(temp)==0:
+                    mongo.db.next_order.insert_one({'Name':i['Name']})
+                    logging.info(f"{i['Name']} Medicine is added to next Order")
+
+
             # To delete data which quantity is zero
             for name, quantity, price in zip(medicine_names, quantities, prices):
                 stock_data = mongo.db.stock.find({'Name': name})
                 for i in stock_data:
                     if i['qty']==0:
                         mongo.db.stock.delete_one({'qty':i['qty']})
-            print("Order has been taken and qty is subtracted from Stock Collection")
+            logging.info("Order has been taken and qty is subtracted from Stock Collection")
+
+
+
             return render_template('result_new.html', data=data,total=total)
         else:
             return render_template('not_available.html',data=name_of_medicine)
+
+
 
 # Stock page
 @app.route('/add_stock')
@@ -118,7 +134,7 @@ def add_medicine():
 
         for name,qty in zip(medicine_names,quantities):
             mongo.db.stock.insert_one({"Name":name,'qty':int(qty)})
-        print("Medicine is added to stock")
+            logging.info(f"{name} medicine is added to stock")
     return redirect('index')
 
 @app.route('/delete_stock')
@@ -142,7 +158,7 @@ def delete_medicine():
             for i in stock_data:
                 if i['qty'] <= 0 :
                     mongo.db.stock.delete_one({'qty':i['qty']})
-        print("Medicine is removed from stock")
+        logging.info("Medicine is removed from stock")
         return redirect('index')
 
 @app.route('/display_stock')
@@ -152,7 +168,7 @@ def display_stock():
     for i in data:
         data_list.append({'Name':i['Name'],'qty':i['qty']})
 
-    print("Stock is displayed")
+    logging.info("Stock is displayed")
     return render_template('display_stock_new.html',data=data_list)
 
 if __name__ == '__main__':

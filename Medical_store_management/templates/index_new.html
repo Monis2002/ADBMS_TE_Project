@@ -44,6 +44,17 @@
             margin: 10px;
             font-size: 18px;
         }
+
+
+        .page-title {
+            position: relative;
+        }
+
+        input[type="submit"] {
+            position: absolute;
+            top: 10px; /* Adjust the top position for the top corner */
+            left: 10px; /* Adjust the left position for the left corner */
+        }
     </style>
 </head>
 <body>
@@ -51,9 +62,7 @@
     <div class="page-title">
         <h1>Home</h1>
         <form action="/">
-            <input style=" position:absolute;
-  top: 35px;
-  right:400px;" type="submit" value="Logout" />
+            <input type="submit" value="Logout" />
         </form>
     </div>
 
